@@ -1,0 +1,27 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elena-salam/nodejs.git"
+  },
+  "author": "Elena Salamakha <elena.salamakha.ua@gmail.comL>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/elena-salam/nodejs/issues"
+  },
+  "homepage": "https://github.com/elena-salam/nodejs#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  },
+  "dependencies": {
+    "yargs": "^16.2.0"
+  }
+}
