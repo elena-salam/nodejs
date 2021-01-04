@@ -1,7 +1,7 @@
 {
   "name": "nodejs",
   "version": "1.0.0",
-  "description": "",
+  "description": "ссылки на скриншоты:\r action_list: https://ibb.co/CvBdBBy\r action_get: https://ibb.co/fN9GnJf\r action_add: https://ibb.co/PNmkSHh\r action_remove: https://ibb.co/3vF3Gmh",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -19,9 +19,14 @@
   },
   "homepage": "https://github.com/elena-salam/nodejs#readme",
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.6",
+    "prettier": "2.2.1"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "joi": "^17.3.0",
+    "morgan": "^1.10.0",
     "yargs": "^16.2.0"
   }
 }
