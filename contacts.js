@@ -47,20 +47,17 @@ async function addContact(name, email, phone) {
 }
 async function updateContact(id, values) {
   const parsedData = await listContacts();
-  const amendedContact = parsedData.forEach(el =>{
-    // if(el.id == parseInt(req.params.contactId)){
-    //   el.name = req.body.name;
-    //   el.email = req.body. email;
-    //   el.phone = req.body.phone;
-      if(el.id === id){
-        el = {...el, ...values};
-      return el;
+  const newData = parsedData.map(contact =>{
+    
+      if(contact.id === id){
+        contact = {...contact, ...values};
+      return contact;
       }
-      return el;
+      return contact;
     })
 
-  const amendedContactToString = JSON.stringify(amendedContact);
-  await fsPromises.writeFile(contactsPath, amendedContactToString);
+  const newContactToString = JSON.stringify(newData);
+  await fsPromises.writeFile(contactsPath, newContactToString);
   const newContact = await getContactById(id);
 
   return newContact;
