@@ -21,6 +21,7 @@ async function getById(req, res){
 async function add(req, res){
     const {name, email, phone} = req.body;
     
+    
     const newContact = await addContact(name, email, phone);
     return res.status(200).json(newContact);
 }
@@ -52,7 +53,7 @@ function validateCreateContact(req, res, next){
         name: Joi.string().min(1).required(),
         email: Joi.string().min(1).email().required(),
         phone: Joi.string().min(1).required(),
-        id: Joi.number().integer()
+        
     });
     const result = schema.validate(req.body);
     if(result.error){
@@ -64,6 +65,10 @@ function validateCreateContact(req, res, next){
 
 
 function validatePatchContact(req, res, next){
+    if(Object.keys(req.body).length === 0){
+        return res.status(400).json({"message": "missing fields"})
+    }
+    
     const schema = Joi.object({
         name: Joi.string().min(1),
         email: Joi.string().min(1).email(),

@@ -58,7 +58,8 @@ async function updateContact(id, values) {
 
   const newContactToString = JSON.stringify(newData);
   await fsPromises.writeFile(contactsPath, newContactToString);
-  const newContact = await getContactById(id);
+  // const newContact = await getContactById(id); Mentor: reduce calls to bd if it can be done
+  const newContact = newData.find(contact => contact.id === id)
 
   return newContact;
 }
