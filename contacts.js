@@ -2,16 +2,13 @@ const fs = require('fs');
 const {promises: fsPromises} = fs;
 const path = require('path');
 
-
-
- const contactsPath = path.join(__dirname, './db/contacts.json');
- 
+const contactsPath = path.join(__dirname, './db/contacts.json');
 
 // TODO: задокументировать каждую функцию
 async function listContacts() {
   const data = await fsPromises.readFile(contactsPath, 'utf-8');
   const parsedData = JSON.parse(data)
-  console.table(parsedData);
+  // console.table(parsedData);
   return parsedData;
   }
   
@@ -29,7 +26,7 @@ async function removeContact(contactId) {
   
   await fsPromises.writeFile(contactsPath, newUsersToString);
   
-  }
+}
   
 async function addContact(name, email, phone) {
   
@@ -48,10 +45,33 @@ async function addContact(name, email, phone) {
   await fsPromises.writeFile(contactsPath, newContactsToString);
   
 }
+async function updateContact(id, values) {
+  const parsedData = await listContacts();
+  // mentor correction:
+  let newContact;
+  
+  const newData = parsedData.map(contact =>{
+    
+      if(contact.id === id){
+        newContact = {...contact, ...values};
+      return newContact;
+      }
+      return contact;
+    })
 
-  module.exports={
-      listContacts,
-      getContactById,
-      removeContact,
-      addContact
-  }
+  const newContactToString = JSON.stringify(newData);
+  await fsPromises.writeFile(contactsPath, newContactToString);
+  // const newContact = await getContactById(id); Mentor: reduce calls to bd if it can be done
+  
+
+  return newContact;
+}
+
+
+module.exports={
+  listContacts,
+  getContactById,
+  removeContact,
+  addContact,
+  updateContact
+}
