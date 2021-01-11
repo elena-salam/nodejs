@@ -47,11 +47,14 @@ async function addContact(name, email, phone) {
 }
 async function updateContact(id, values) {
   const parsedData = await listContacts();
+  // mentor correction:
+  let newContact;
+  
   const newData = parsedData.map(contact =>{
     
       if(contact.id === id){
-        contact = {...contact, ...values};
-      return contact;
+        newContact = {...contact, ...values};
+      return newContact;
       }
       return contact;
     })
@@ -59,7 +62,7 @@ async function updateContact(id, values) {
   const newContactToString = JSON.stringify(newData);
   await fsPromises.writeFile(contactsPath, newContactToString);
   // const newContact = await getContactById(id); Mentor: reduce calls to bd if it can be done
-  const newContact = newData.find(contact => contact.id === id)
+  
 
   return newContact;
 }
