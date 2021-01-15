@@ -1,85 +1,45 @@
-const Joi = require('joi');
-const { listContacts, getContactById, addContact, removeContact, updateContact } = require('../contacts.js');
+
+const {Contact} = require('../models/model.js');
 
 
-async function getContacts(req, res) {
-    return res.status(200).json(await listContacts());
+ getContacts = async (req, res) => {
+    const contacts = await Contact.find({});
+    res.json({contacts});
+    
 }
 
-
-async function getById(req, res){
-    const id = parseInt(req.params.contactId);
-    const contact = await getContactById(id);
+getById = async(req, res) =>{
+    const contact = await Contact.findById(req.params.contactId);
     if(!contact){
-        return res.status(404).json({"message": "Not found"});
+      return res.status(400).json({message: `No contact with id ${req.params.contactId} has been found`})
     }
-    return res.status(200).json(contact);
+    res.json({contact});
 }
 
-
-
-async function add(req, res){
-    const {name, email, phone} = req.body;
+add = async(req, res) =>{
     
-    
-    const newContact = await addContact(name, email, phone);
-    return res.status(200).json(newContact);
-}
-
-async function remove(req, res){
-    const id = parseInt(req.params.contactId);
-    const contact = await getContactById(id);
-    if(!contact){
-        return res.status(404).json({"message": "Not found"});
-    }
-    const contactToDelete = await removeContact(id)
-    return res.status(200).json(contactToDelete);
-}
-
-
-async function update(req, res){
-    const id = parseInt(req.params.contactId);
-    const contact = await getContactById(id);
-    if(!contact){
-        return res.status(404).json({"message": "Not found"});
-    }
-    const updatedContact = await updateContact(id, req.body);
-    return res.status(200). json(updatedContact);
-
-}
-
-function validateCreateContact(req, res, next){
-    const schema = Joi.object({
-        name: Joi.string().min(1).required(),
-        email: Joi.string().min(1).email().required(),
-        phone: Joi.string().min(1).required(),
-        
-    });
-    const result = schema.validate(req.body);
-    if(result.error){
-        return res.status(400).json({message: result.error});
-    }
-    next();
+      const contact = new Contact({
+        name: req.body.name,
+        email: req.body.email,
+        phone: req.body.phone,
+        subscription: req.body.subscription,
+        password: req.body.password
+        // token: req.body.token
+      });
+      await contact.save();
+      res.json({message: "Contact created!"});
     
 }
 
+remove = async(req, res) =>{
+    await Contact.findByIdAndDelete(req.params.contactId);
+    res.json({message: "Contact deleted!"});
+}
 
-function validatePatchContact(req, res, next){
-    if(Object.keys(req.body).length === 0){
-        return res.status(400).json({"message": "missing fields"})
-    }
+update = async(req, res) =>{
+    await Contact.findByIdAndUpdate(req.params.contactId, {$set: req.body});
+    res.json({message: "Contact modified!"});
     
-    const schema = Joi.object({
-        name: Joi.string().min(1),
-        email: Joi.string().min(1).email(),
-        phone: Joi.string().min(1),
-        
-    });
-    const result = schema.validate(req.body);
-    if(result.error){
-        return res.status(400).send(result.error);
-    }
-    next();
 }
 
 module.exports = {
@@ -87,8 +47,6 @@ module.exports = {
     getById,
     add,
     remove,
-    update,
-    validateCreateContact,
-    validatePatchContact
+    update
     
 }
