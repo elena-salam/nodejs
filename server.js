@@ -6,11 +6,7 @@ const cors = require('cors');
 require('dotenv').config();
 const contactRouter = require("./routers/contactsRouter.js");
 const PORT =  process.env.PORT;
-const URL = process.env.MONGO_URL;
 
-// app.use((error, req, res, next) => {
-//   res.status(500).json({message: error.message});
-// })
 
 module.exports = class ContactServer {
     constructor() {
