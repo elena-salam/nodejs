@@ -2,14 +2,14 @@
 const {ContactModel} = require('../models/ContactModel.js');
 
 
- getContacts = async (req, res) => {
+ getContactsList = async (req, res) => {
     const contacts = await ContactModel.find({});
     return res.status(200).json({contacts});
     
 }
 
 
-getById = async(req, res) =>{
+getContactById = async(req, res) =>{
     const contact = await ContactModel.findById(req.params.contactId);
     if( !contact ){
       return res.status(404).json({message: "Not found"});
@@ -17,7 +17,7 @@ getById = async(req, res) =>{
     return res.status(200).json({contact});
 }
 
-add = async(req, res) =>{
+addContact = async(req, res) =>{
     
     const contact = new ContactModel(req.body);
     await contact.save();
@@ -26,7 +26,7 @@ add = async(req, res) =>{
 }
 
 
-remove = async(req, res) =>{
+removeContact = async(req, res) =>{
     const contactToDelete = await ContactModel.findByIdAndDelete(req.params.contactId);
     if(!contactToDelete){
         return res.status(404).json({message: "Not found"});
@@ -35,7 +35,7 @@ remove = async(req, res) =>{
     return res.status(200).json({message: "Contact deleted!"});
 }
 
-update = async(req, res) =>{
+updateContact = async(req, res) =>{
     const contact = await ContactModel.findByIdAndUpdate(req.params.contactId, {$set: req.body});
     if(!contact){
         return res.status(404).json({message: "Not found"})
@@ -45,10 +45,10 @@ update = async(req, res) =>{
 }
 
 module.exports = {
-    getContacts,
-    getById,
-    add,
-    remove,
-    update
+    getContactsList,
+    getContactById,
+    addContact,
+    removeContact,
+    updateContact
     
 }
