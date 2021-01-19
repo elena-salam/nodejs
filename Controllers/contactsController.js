@@ -1,44 +1,46 @@
 
-const {Contact} = require('../models/model.js');
+const {ContactModel} = require('../models/ContactModel.js');
 
 
  getContacts = async (req, res) => {
-    const contacts = await Contact.find({});
-    res.json({contacts});
+    const contacts = await ContactModel.find({});
+    return res.status(200).json({contacts});
     
 }
 
+
 getById = async(req, res) =>{
-    const contact = await Contact.findById(req.params.contactId);
-    if(!contact){
-      return res.status(400).json({message: `No contact with id ${req.params.contactId} has been found`})
+    const contact = await ContactModel.findById(req.params.contactId);
+    if( !contact ){
+      return res.status(404).json({message: "Not found"});
     }
-    res.json({contact});
+    return res.status(200).json({contact});
 }
 
 add = async(req, res) =>{
     
-      const contact = new Contact({
-        name: req.body.name,
-        email: req.body.email,
-        phone: req.body.phone,
-        subscription: req.body.subscription,
-        password: req.body.password
-        // token: req.body.token
-      });
-      await contact.save();
-      res.json({message: "Contact created!"});
+    const contact = new ContactModel(req.body);
+    await contact.save();
+    return res.status(201).json({message: "Contact created!"});
     
 }
 
+
 remove = async(req, res) =>{
-    await Contact.findByIdAndDelete(req.params.contactId);
-    res.json({message: "Contact deleted!"});
+    const contactToDelete = await ContactModel.findByIdAndDelete(req.params.contactId);
+    if(!contactToDelete){
+        return res.status(404).json({message: "Not found"});
+    }
+    
+    return res.status(200).json({message: "Contact deleted!"});
 }
 
 update = async(req, res) =>{
-    await Contact.findByIdAndUpdate(req.params.contactId, {$set: req.body});
-    res.json({message: "Contact modified!"});
+    const contact = await ContactModel.findByIdAndUpdate(req.params.contactId, {$set: req.body});
+    if(!contact){
+        return res.status(404).json({message: "Not found"})
+    }
+    return res.status(200).json({message: "Contact modified!"});
     
 }
 

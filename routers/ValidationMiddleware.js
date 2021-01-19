@@ -5,9 +5,9 @@ module.exports.validateCreateContact = (req, res, next) =>{
     name: Joi.string().min(1).required(),
     email: Joi.string().min(1).email().required(),
     phone: Joi.string().min(1).required(),
-    subscription: Joi.string().min(3).required(),
+    subscription: Joi.string().min(3),
     password: Joi.string().min(8).required(),
-    token: Joi.string()
+    token: Joi.string().token().allow('')
         
 });
   const result = schema.validate(req.body);
@@ -30,7 +30,7 @@ module.exports.validatePatchContact = (req, res, next) => {
     phone: Joi.string().min(1),
     subscription: Joi.string().min(3),
     password: Joi.string().min(8),
-    token: Joi.string()
+    token: Joi.string().token().allow('')
         
   });
   const result = schema.validate(req.body);
