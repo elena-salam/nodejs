@@ -21,7 +21,7 @@ addContact = async(req, res) =>{
     
     const contact = new ContactModel(req.body);
     await contact.save();
-    return res.status(201).json({message: "Contact created!"});
+    return res.status(201).send(contact);
     
 }
 
