@@ -1,15 +1,11 @@
 const Joi = require('joi');
 
-module.exports.validateCreateContact = (req, res, next) =>{
+module.exports.validateUserRegistration = (req, res, next) =>{
   const schema = Joi.object({
-    name: Joi.string().min(1).required(),
-    email: Joi.string().min(1).email().required(),
-    phone: Joi.string().min(1).required(),
-    subscription: Joi.string().min(3),
-    password: Joi.string().min(8).required(),
-    token: Joi.string().token().allow('')
-        
-});
+    email: Joi.string().min(3).email().required(),
+    password: Joi.string().min(3).required(),
+    subscription: Joi.string().min(3)
+  });
   const result = schema.validate(req.body);
   if(result.error){
     return res.status(400).json({message: result.error});
@@ -18,24 +14,16 @@ module.exports.validateCreateContact = (req, res, next) =>{
   
 }
 
-
-module.exports.validatePatchContact = (req, res, next) => {
-  if(Object.keys(req.body).length === 0){
-    return res.status(400).json({"message": "missing fields"})
-  }
-    
+module.exports.validateUserLogin = (req, res, next) =>{
   const schema = Joi.object({
-    name: Joi.string().min(1),
-    email: Joi.string().min(1).email(),
-    phone: Joi.string().min(1),
-    subscription: Joi.string().min(3),
-    password: Joi.string().min(8),
-    token: Joi.string().token().allow('')
-        
+    email: Joi.string().min(3).email().required(),
+    password: Joi.string().min(3).required(),
+    
   });
   const result = schema.validate(req.body);
   if(result.error){
-    return res.status(400).send(result.error);
-    }
+    return res.status(400).json({message: result.error});
+  }
   next();
+  
 }

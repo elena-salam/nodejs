@@ -4,12 +4,14 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 require('dotenv').config();
-const contactRouter = require("./routers/contactsRouter.js");
+const userRouter = require("./routers/userRouter.js");
+const authRouter = require("./routers/authRouter.js");
+// const notesRouter = require("./routers/notesRouter.js");
 const PORT =  process.env.PORT;
 const URL = process.env.MONGO_URL;
 
 
-module.exports = class ContactServer {
+module.exports = class UserServer {
     constructor() {
         this.server = null;
     }
@@ -32,7 +34,8 @@ module.exports = class ContactServer {
     }
 
     initRoutes() {
-        this.server.use("/api/contacts", contactRouter);
+        this.server.use("/api/users", userRouter);
+        this.server.use("/api/auth", authRouter);
     }
 
     async initDatabase() {
