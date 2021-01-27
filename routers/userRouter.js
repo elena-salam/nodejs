@@ -1,12 +1,11 @@
 const express = require('express');
 const userRouter = express.Router();
 // const {asyncWrapper} = require('./helper.js')
-const { getCurrentUser, updateUser } = require('../Controllers/userController.js');
+const { getCurrentUser } = require('../Controllers/userController.js');
 const authMiddleware = require('./authMiddleware.js');
 
-userRouter.use(authMiddleware);
-userRouter.get('/current', getCurrentUser);
-// userRouter.patch('/', updateUser);
+
+userRouter.get('/current', authMiddleware, getCurrentUser); //проверяем валидный ли token (Bearer)
 
 
 module.exports = userRouter;

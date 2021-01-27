@@ -9,6 +9,6 @@ const authValidation = require('./authMiddleware.js'); //jwt token in header Aut
 
 router.post('/register', validateUserRegistration, asyncWrapper(registration));
 router.post('/login', validateUserLogin, asyncWrapper(login));
-router.patch('/logout', authValidation, asyncWrapper(logout)); //проверяем валидный ли token
+router.post('/logout', authValidation, asyncWrapper(logout)); //проверяем валидный ли token
 
 module.exports = router;

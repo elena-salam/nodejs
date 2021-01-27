@@ -1,6 +1,5 @@
 // authMiddleware проверяет токен на наличие и валидирует его.
 const jwt = require('jsonwebtoken');
-// const {userModel} = require('../models/UserModel.js'); надо ли?
 
 module.exports = (req, res,next) =>{
     const header = req.headers['authorization'];
