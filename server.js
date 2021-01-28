@@ -7,6 +7,7 @@ require('dotenv').config();
 const userRouter = require("./routers/userRouter.js");
 const authRouter = require("./routers/authRouter.js");
 // const notesRouter = require("./routers/notesRouter.js");
+const contactRouter = require('./routers/contactRouter.js')
 const PORT =  process.env.PORT;
 const URL = process.env.MONGO_URL;
 
@@ -36,6 +37,7 @@ module.exports = class UserServer {
     initRoutes() {
         this.server.use("/api/users", userRouter);
         this.server.use("/api/auth", authRouter);
+        this.server.use("api/contacts", contactRouter);
     }
 
     async initDatabase() {
