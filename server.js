@@ -37,7 +37,7 @@ module.exports = class UserServer {
     initRoutes() {
         this.server.use("/api/users", userRouter);
         this.server.use("/api/auth", authRouter);
-        this.server.use("api/contacts", contactRouter);
+        this.server.use("/api/contacts", contactRouter);
     }
 
     async initDatabase() {

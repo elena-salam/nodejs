@@ -1,12 +1,16 @@
-const mongoose = require('mongoose');
-const{User} = require('../models/UserModel.js');
+const {UserModel} = require('../models/UserModel');
 
-module.exports.getContacts = async(req, res) =>{
-    const {skip=0, limit=10} = req.query;
-    const contacts = await User.find(
-        {userId: new mongoose.Types.ObjectId(req.user.id)},
-        {_v: 0},
-        {skip: parseInt(skip), limit:patseInt(limit)}
-    )
-    res.json({contacts});
+module.exports.getContactsList = async (req, res) =>{
+    const contacts = await UserModel.find()
+    
+    if(!contacts){
+        return res.status(401).json({message: "No contacts"})
+    }
+    
+    return res.status(200). send({contacts});
 }
+
+// req.user = user;
+//     const {email, subscription} = req.user;
+//     return res.status(200).send({email, subscription});
+
