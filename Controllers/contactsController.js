@@ -10,7 +10,3 @@ module.exports.getContactsList = async (req, res) =>{
     return res.status(200). send({contacts});
 }
 
-// req.user = user;
-//     const {email, subscription} = req.user;
-//     return res.status(200).send({email, subscription});
-
