@@ -6,11 +6,10 @@ const cors = require('cors');
 require('dotenv').config();
 const userRouter = require("./routers/userRouter.js");
 const authRouter = require("./routers/authRouter.js");
-// const notesRouter = require("./routers/notesRouter.js");
-const contactRouter = require('./routers/contactRouter.js')
+const contactRouter = require('./routers/contactRouter.js');
+
 const PORT =  process.env.PORT;
 const URL = process.env.MONGO_URL;
-
 
 module.exports = class UserServer {
     constructor() {
@@ -32,6 +31,7 @@ module.exports = class UserServer {
         this.server.use(express.json());
         this.server.use(cors());
         this.server.use(morgan("dev"));
+        this.server.use(express.static('./public'));
     }
 
     initRoutes() {

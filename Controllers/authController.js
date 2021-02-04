@@ -1,4 +1,5 @@
 const {UserModel} = require('../models/UserModel.js');
+const {createAvatar} = require('../avatar/avatarGenerator.js');
 
 module.exports.registration = async(req, res) =>{
 
@@ -9,15 +10,22 @@ module.exports.registration = async(req, res) =>{
     } 
     
     const passwordHash = await UserModel.hashPassword(req.body.password);
+    const avatarName = await createAvatar();
+    const avatarUrlString = `http://localhost:${process.env.PORT}/images/${avatarName}` // детальнее
+
     const user = new UserModel({
         email: req.body.email,
         password: passwordHash,
+        avatarUrl: avatarUrlString,
         subscription: req.body.subscroption
 
     })
+
+    
     await user.save();
     return res.status(201).json({
         email: user.email, 
+        avatarUrl: user.avatarUrl,
         subscription: user.subscription
     });
     
