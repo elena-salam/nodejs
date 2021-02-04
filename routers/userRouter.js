@@ -8,6 +8,6 @@ const minifyImage = require('../middlewares/minimizeImgMiddleware');
 
 userRouter.get('/current', authMiddleware, getCurrentUser); //проверяем валидный ли token
 
-userRouter.post('/avatars', uploadMiddleware.single('avatar'), minifyImage, updateUserAvatar);
+userRouter.patch('/avatars', authMiddleware, uploadMiddleware.single('avatar'), minifyImage, updateUserAvatar);
 
 module.exports = userRouter;
