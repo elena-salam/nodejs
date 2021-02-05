@@ -1,23 +1,31 @@
 const {UserModel} = require('../models/UserModel.js');
+const createAvatar = require('../avatar/avatarGenerator.js');
 
 module.exports.registration = async(req, res) =>{
 
     const existingEmail = await UserModel.findOne({email:req.body.email}); 
-    console.log(existingEmail);
+    
     if( existingEmail ){
       return res.status(409).send("Email in use");
     } 
     
     const passwordHash = await UserModel.hashPassword(req.body.password);
+    const avatarName = await createAvatar();
+    const avatarUrlString = `http://localhost:${process.env.PORT}/images/${avatarName}`
+
     const user = new UserModel({
         email: req.body.email,
         password: passwordHash,
+        avatarURL: avatarUrlString,
         subscription: req.body.subscroption
 
     })
+
+    
     await user.save();
     return res.status(201).json({
         email: user.email, 
+        avatarUrl: user.avatarURL,
         subscription: user.subscription
     });
     
