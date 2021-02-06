@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
 
+
 async function sendEmail(recipient, verificationToken){
     const transport = nodemailer.createTransport({
         service: 'gmail',
@@ -12,7 +13,7 @@ async function sendEmail(recipient, verificationToken){
         from: process.env.NODEMAILER_EMAIL,
         to: recipient,
         subject: "Email verification",
-        html: `<a href='http://localhost:8080/api/auth/verify/${verificationToken}'>Click to verify</a>`,
+        html: `<a href='http://localhost:${process.env.PORT}/api/auth/verify/${verificationToken}'>Click to verify</a>`,
     });  
 }
 
