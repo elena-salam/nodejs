@@ -1,5 +1,7 @@
 const {UserModel} = require('../models/UserModel.js');
 const createAvatar = require('../avatar/avatarGenerator.js');
+const sendEmail = require('../utils/sendEmail.js');
+const uuid = require('uuid');
 
 module.exports.registration = async(req, res) =>{
 
@@ -20,9 +22,12 @@ module.exports.registration = async(req, res) =>{
         subscription: req.body.subscroption
 
     })
-
     
-    await user.save();
+    await user.save(); //user was saved in base
+    const verificationToken = uuid.v4(); //creating token
+    await user.createVerificationToken(verificationToken); //save token in base;
+    await sendEmail(user.email, verificationToken); //sending email
+
     return res.status(201).json({
         email: user.email, 
         avatarUrl: user.avatarURL,
@@ -66,6 +71,21 @@ module.exports.logout = async(req, res, next) =>{
     }
      return res.status(204).send();
     
+}
+
+module.exports.verifyEmail = async(req, res, next) =>{
+    try{
+        const {verificationToken} = req.params;
+        const user = await UserModel.findByVerificationToken(verificationToken);
+        if(!user){
+            return res.status(404).send("User not found");
+        }
+        await user.removeVerificationToken();
+        return res.status(200).send("Verified");
+
+    } catch (err) {
+        next(err)
+    }
 }
 
 
