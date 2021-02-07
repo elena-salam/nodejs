@@ -8,7 +8,8 @@ const userSchema = new mongoose.Schema({
   password: {type: String, required: true},
   avatarURL: {type: String},
   subscription: {type: String, enum: ["free", "pro", "premium"], default: "free"},
-  token: {type: String, default: ""}
+  token: {type: String, default: ""},
+  verificationToken: {type: String}
   });
   
   //статические методы нам нужны, когда мы хотим написать какую-то функцию, 
@@ -16,6 +17,9 @@ const userSchema = new mongoose.Schema({
   //statics вызываются у класса "UserModel.hashPassword"
 userSchema.statics.hashPassword = async function (password){
   return await bcrypt.hash(password, 10)
+}
+userSchema.statics.findByVerificationToken = async function(verificationToken){
+  return this.findOne({verificationToken}) //находим пользователя по токену верификации
 }
 
   //methods вызываются у экземпляра класса "user.comparePassword"
@@ -33,6 +37,16 @@ userSchema.methods.createToken = async function(){
 
 userSchema.methods.updateToken = async function(){
   return await this.constructor.findByIdAndUpdate(this._id, {token: ""});
+}
+
+userSchema.methods.createVerificationToken = async function(verificationToken){
+  return this.constructor.findByIdAndUpdate(this._id, {verificationToken}, {new: true});
+}
+
+userSchema.methods.removeVerificationToken = async function (){
+  return this.constructor.findByIdAndUpdate(this._id, {
+    verificationToken: null
+  })
 }
   
   // определение "модели":
